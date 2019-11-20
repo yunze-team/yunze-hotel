@@ -23,7 +23,8 @@ public class IndexController {
 
     @GetMapping("/countries")
     public String allCountries() {
-        return internalCodeService.getAllCountries();
+        internalCodeService.syncCountries();
+        return "SUCCESS";
     }
 
 }
