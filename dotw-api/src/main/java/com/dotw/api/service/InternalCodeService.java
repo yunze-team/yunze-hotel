@@ -1,5 +1,9 @@
 package com.dotw.api.service;
 
+import com.dotw.api.common.DCMLHandler;
+import lombok.extern.apachecommons.CommonsLog;
+import org.dom4j.Document;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -8,5 +12,16 @@ import org.springframework.stereotype.Service;
  * @desc
  **/
 @Service
+@CommonsLog
 public class InternalCodeService {
+
+    @Autowired
+    private DCMLHandler dcmlHandler;
+
+    public String getAllCountries() {
+        log.info("getAllCountries start.");
+        Document doc = dcmlHandler.getAllCountries();
+        return dcmlHandler.sendDotw(doc);
+    }
+
 }
