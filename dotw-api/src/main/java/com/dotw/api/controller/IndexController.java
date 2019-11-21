@@ -21,9 +21,36 @@ public class IndexController {
         return "dotw api started.";
     }
 
-    @GetMapping("/countries")
-    public String allCountries() {
+    @GetMapping("/synccountries")
+    public String syncCountries() {
         internalCodeService.syncCountries();
+        return "SUCCESS";
+    }
+
+    @GetMapping("/countries")
+    public Object allCountries() {
+        return internalCodeService.getAllCountries();
+    }
+
+    @GetMapping("/cities")
+    public Object allCities() {
+        return internalCodeService.getAllCities();
+    }
+
+    @GetMapping("/synccities")
+    public String syncCities() {
+        internalCodeService.syncCities();
+        return "SUCCESS";
+    }
+
+    @GetMapping("/currencies")
+    public Object allcurrencies() {
+        return internalCodeService.getAllCurrencies();
+    }
+
+    @GetMapping("/synccurrencies")
+    public String syncCurrencies() {
+        internalCodeService.syncCurrencies();
         return "SUCCESS";
     }
 

@@ -59,6 +59,22 @@ public class DCMLHandler {
         return doc;
     }
 
+    public Document getAllCitiesByCountry(String countryCode, String countryName) {
+        Document doc = generateBaseRequest();
+        Element customer = doc.getRootElement();
+        Element request = customer.addElement("request");
+        request.addAttribute("command", "getallcities");
+        Element reEl = request.addElement("return");
+        Element filtersEl = reEl.addElement("filters");
+        filtersEl.addElement("countryCode").setText(countryCode);
+        filtersEl.addElement("countryName").setText(countryName);
+        Element fieldsEl = reEl.addElement("fields");
+        fieldsEl.addElement("field").setText("countryName");
+        fieldsEl.addElement("field").setText("countryCode");
+        log.info(doc.asXML());
+        return doc;
+    }
+
     public String sendDotw(Document doc) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -67,6 +83,15 @@ public class DCMLHandler {
         ResponseEntity<String> responseEntity = restTemplate.postForEntity("http://" + DOTWUrl, xmlEntity, String.class);
         log.info(responseEntity);
         return XmlTool.documentToJSONObject(responseEntity.getBody()).toJSONString();
+    }
+
+    public Document getAllCurrencies() {
+        Document doc = generateBaseRequest();
+        Element customer = doc.getRootElement();
+        Element request = customer.addElement("request");
+        request.addAttribute("command", "getcurrenciesids");
+        log.info(doc.asXML());
+        return doc;
     }
 
 }
