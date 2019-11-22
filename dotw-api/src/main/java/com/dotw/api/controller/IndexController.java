@@ -1,5 +1,6 @@
 package com.dotw.api.controller;
 
+import com.dotw.api.service.HotelInfoApiService;
 import com.dotw.api.service.InternalCodeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,8 @@ public class IndexController {
 
     @Autowired
     private InternalCodeService internalCodeService;
+    @Autowired
+    private HotelInfoApiService hotelInfoApiService;
 
     @GetMapping("/")
     public String index() {
@@ -52,6 +55,11 @@ public class IndexController {
     public String syncCurrencies() {
         internalCodeService.syncCurrencies();
         return "SUCCESS";
+    }
+
+    @GetMapping("/hotels")
+    public Object allHotels() {
+        return hotelInfoApiService.getAllByExcel();
     }
 
 }
