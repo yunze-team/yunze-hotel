@@ -40,16 +40,20 @@ public class CommonUtil {
                 hotelInfo.setRegion(row.getCell(0).getStringCellValue());
                 hotelInfo.setCountry(row.getCell(1).getStringCellValue());
                 hotelInfo.setShortCountryName(row.getCell(2).getStringCellValue());
-                hotelInfo.setCountryCode(row.getCell(3).getStringCellValue());
+                hotelInfo.setCountryCode(row.getCell(3).getRawValue());
                 hotelInfo.setCity(row.getCell(4).getStringCellValue());
-                hotelInfo.setCityCode(row.getCell(5).getStringCellValue());
-                hotelInfo.setHotelCode(row.getCell(6).getStringCellValue());
+                hotelInfo.setCityCode(row.getCell(5).getRawValue());
+                hotelInfo.setHotelCode(row.getCell(6).getRawValue());
                 hotelInfo.setHotelName(row.getCell(7).getStringCellValue());
                 hotelInfo.setStarRating(row.getCell(8).getStringCellValue());
-                hotelInfo.setReservationTelephone(row.getCell(9).getStringCellValue());
+                try {
+                    hotelInfo.setReservationTelephone(row.getCell(9).getStringCellValue());
+                } catch (Exception e) {
+                    hotelInfo.setReservationTelephone(row.getCell(9).getRawValue());
+                }
                 hotelInfo.setHotelAddress(row.getCell(10).getStringCellValue());
-                hotelInfo.setLatitude(row.getCell(11).getStringCellValue());
-                hotelInfo.setLongitude(row.getCell(12).getStringCellValue());
+                hotelInfo.setLatitude(row.getCell(11).getRawValue());
+                hotelInfo.setLongitude(row.getCell(12).getRawValue());
                 hotelInfo.setChainName(row.getCell(13).getStringCellValue());
                 hotelInfo.setBrandName(row.getCell(14).getStringCellValue());
                 hotelInfo.setNewProperty(row.getCell(15).getStringCellValue());

@@ -57,9 +57,10 @@ public class IndexController {
         return "SUCCESS";
     }
 
-    @GetMapping("/hotels")
-    public Object allHotels() {
-        return hotelInfoApiService.getAllByExcel();
+    @GetMapping("/synchotels")
+    public String allHotels() {
+        hotelInfoApiService.syncBasicData();
+        return "SUCCESS";
     }
 
 }

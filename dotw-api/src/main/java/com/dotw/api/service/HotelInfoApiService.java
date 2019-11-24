@@ -1,6 +1,7 @@
 package com.dotw.api.service;
 
 import com.dotw.core.domain.HotelInfo;
+import com.dotw.core.service.HotelInfoService;
 import com.dotw.core.util.CommonUtil;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,20 +18,16 @@ import java.util.List;
 @CommonsLog
 public class HotelInfoApiService {
 
-    @Value("${dotw.hotel.excel}")
-    private String dataPath;
-
     @Autowired
-    private CommonUtil commonUtil;
+    private HotelInfoService hotelInfoService;
 
-    public List<HotelInfo> getAllByExcel() {
-        List<HotelInfo> list = new ArrayList<>();
+    public void syncBasicData() {
         try {
-            list = commonUtil.excelToHotelBean(dataPath);
-        } catch (Exception e) {
+            hotelInfoService.syncByExcel();
+            log.info("hotel sync success");
+        } catch(Exception e) {
             log.info(e.getMessage());
         }
-        return list;
     }
 
 }

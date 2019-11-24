@@ -52,10 +52,10 @@ public class HotelInfo {
     @Column(length = 50)
     private String starRating;
 
-    @Column(length = 50)
+    @Column(length = 100)
     private String reservationTelephone;
 
-    @Column(length = 200)
+    @Column(length = 500)
     private String hotelAddress;
 
     @Column(length = 50)
