@@ -43,20 +43,42 @@ public class CommonUtil {
                 hotelInfo.setCountryCode(row.getCell(3).getRawValue());
                 hotelInfo.setCity(row.getCell(4).getStringCellValue());
                 hotelInfo.setCityCode(row.getCell(5).getRawValue());
-                hotelInfo.setHotelCode(row.getCell(6).getRawValue());
-                hotelInfo.setHotelName(row.getCell(7).getStringCellValue());
-                hotelInfo.setStarRating(row.getCell(8).getStringCellValue());
+                hotelInfo.setDotwHotelCode(row.getCell(6).getRawValue());
+                hotelInfo.setHotelbedsHotelCode(row.getCell(7).getRawValue());
+                hotelInfo.setExpediaHotelCode(row.getCell(8).getRawValue());
                 try {
-                    hotelInfo.setReservationTelephone(row.getCell(9).getStringCellValue());
+                    hotelInfo.setHotelName(row.getCell(9).getStringCellValue());
                 } catch (Exception e) {
-                    hotelInfo.setReservationTelephone(row.getCell(9).getRawValue());
+                    hotelInfo.setHotelName(row.getCell(9).getRawValue());
                 }
-                hotelInfo.setHotelAddress(row.getCell(10).getStringCellValue());
-                hotelInfo.setLatitude(row.getCell(11).getRawValue());
-                hotelInfo.setLongitude(row.getCell(12).getRawValue());
-                hotelInfo.setChainName(row.getCell(13).getStringCellValue());
-                hotelInfo.setBrandName(row.getCell(14).getStringCellValue());
-                hotelInfo.setNewProperty(row.getCell(15).getStringCellValue());
+                try {
+                    hotelInfo.setStarRating(row.getCell(10).getStringCellValue());
+                } catch (Exception e) {
+                    hotelInfo.setStarRating(row.getCell(10).getRawValue());
+                }
+                try {
+                    hotelInfo.setReservationTelephone(row.getCell(11).getStringCellValue());
+                } catch (Exception e) {
+                    hotelInfo.setReservationTelephone(row.getCell(11).getRawValue());
+                }
+                hotelInfo.setHotelAddress(row.getCell(12).getStringCellValue());
+                hotelInfo.setLatitude(row.getCell(13).getRawValue());
+                hotelInfo.setLongitude(row.getCell(14).getRawValue());
+                try {
+                    hotelInfo.setChainName(row.getCell(15).getStringCellValue());
+                } catch (Exception e) {
+                    hotelInfo.setChainName(row.getCell(15).getRawValue());
+                }
+                try {
+                    hotelInfo.setBrandName(row.getCell(16).getStringCellValue());
+                } catch (Exception e) {
+                    hotelInfo.setBrandName(row.getCell(16).getRawValue());
+                }
+                try {
+                    hotelInfo.setNewProperty(row.getCell(17).getStringCellValue());
+                } catch (Exception e) {
+                    hotelInfo.setNewProperty(row.getCell(17).getRawValue());
+                }
                 list.add(hotelInfo);
             }
         }

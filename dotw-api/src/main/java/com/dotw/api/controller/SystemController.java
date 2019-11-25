@@ -59,4 +59,10 @@ public class SystemController {
         hotelInfoApiService.syncBasicData();
         return "SUCCESS";
     }
+
+    @GetMapping("/syncbatchhotels")
+    public String batchHotels() {
+        hotelInfoApiService.syncBatchData();
+        return "SUCCESS";
+    }
 }

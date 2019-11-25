@@ -44,7 +44,13 @@ public class HotelInfo {
     private String cityCode;
 
     @Column(length = 20)
-    private String hotelCode;
+    private String dotwHotelCode;
+
+    @Column(length = 20)
+    private String hotelbedsHotelCode;
+
+    @Column(length = 20)
+    private String expediaHotelCode;
 
     @Column(length = 100)
     private String hotelName;

@@ -30,4 +30,13 @@ public class HotelInfoApiService {
         }
     }
 
+    public void syncBatchData() {
+        try {
+            hotelInfoService.syncByExcelForBatch();
+            log.info("hotel sync batch success");
+        } catch (Exception e) {
+            log.info(e.getMessage());
+        }
+    }
+
 }

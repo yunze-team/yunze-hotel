@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface HotelInfoRepository extends JpaRepository<HotelInfo, Long> {
 
-    HotelInfo findByHotelCode(String hotelCode);
+    HotelInfo findByDotwHotelCode(String dotwHotelCode);
 
 }
