@@ -5,10 +5,19 @@ import com.dotw.core.redis.IRedisService;
 import com.dotw.core.repository.HotelInfoRepository;
 import com.dotw.core.util.CommonUtil;
 import lombok.extern.apachecommons.CommonsLog;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,6 +79,22 @@ public class HotelInfoService {
             hotelInfoRepository.save(list);
         }
         log.info("sync batch hotel items size: " + i);
+    }
+
+    public Page<HotelInfo> findAllByPageQuery(Integer page, Integer size, String country) {
+        Pageable pageable = new PageRequest(page - 1, size);
+        if (StringUtils.isEmpty(country)) {
+            return hotelInfoRepository.findAll(pageable);
+        } else {
+            return hotelInfoRepository.findAll(new Specification<HotelInfo>() {
+                @Override
+                public Predicate toPredicate(Root<HotelInfo> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                    Predicate p = criteriaBuilder.equal(root.get("country").as(String.class), country);
+                    criteriaQuery.where(criteriaBuilder.and(p));
+                    return criteriaQuery.getRestriction();
+                }
+            }, pageable);
+        }
     }
 
 }

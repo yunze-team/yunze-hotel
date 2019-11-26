@@ -8,7 +8,7 @@
                     <i class="fa fa-dashboard"></i> <span>首页</span>
                 </a>
             </li>
-            <li id="page_users">
+            <li id="page_hotel">
                 <a href="/index/hotel">
                     <i class="fa fa-folder"></i> <span>酒店管理</span>
                 </a>

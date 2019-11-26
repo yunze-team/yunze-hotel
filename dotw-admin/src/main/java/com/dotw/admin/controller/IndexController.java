@@ -96,4 +96,9 @@ public class IndexController {
         return "403";
     }
 
+    @RequestMapping("/index/hotel")
+    public String hotels() {
+        return "hotel";
+    }
+
 }
