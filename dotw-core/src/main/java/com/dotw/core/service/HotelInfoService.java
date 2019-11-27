@@ -1,6 +1,7 @@
 package com.dotw.core.service;
 
 import com.dotw.core.domain.HotelInfo;
+import com.dotw.core.domain.query.HotelQuery;
 import com.dotw.core.redis.IRedisService;
 import com.dotw.core.repository.HotelInfoRepository;
 import com.dotw.core.util.CommonUtil;
@@ -11,13 +12,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -81,20 +78,28 @@ public class HotelInfoService {
         log.info("sync batch hotel items size: " + i);
     }
 
-    public Page<HotelInfo> findAllByPageQuery(Integer page, Integer size, String country) {
+    public Page<HotelInfo> findAllByPageQuery(Integer page, Integer size, HotelQuery hotelQuery) {
         Pageable pageable = new PageRequest(page - 1, size);
-        if (StringUtils.isEmpty(country)) {
-            return hotelInfoRepository.findAll(pageable);
-        } else {
-            return hotelInfoRepository.findAll(new Specification<HotelInfo>() {
-                @Override
-                public Predicate toPredicate(Root<HotelInfo> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                    Predicate p = criteriaBuilder.equal(root.get("country").as(String.class), country);
-                    criteriaQuery.where(criteriaBuilder.and(p));
-                    return criteriaQuery.getRestriction();
-                }
-            }, pageable);
-        }
+        return hotelInfoRepository.findAll((root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> list = new ArrayList<>();
+            if (StringUtils.isNotEmpty(hotelQuery.getDotwHotelCode())) {
+                list.add(criteriaBuilder.equal(root.get("dotwHotelCode").as(String.class), hotelQuery.getDotwHotelCode()));
+            }
+            if (StringUtils.isNotEmpty(hotelQuery.getCountry())) {
+                list.add(criteriaBuilder.equal(root.get("country").as(String.class), hotelQuery.getCountry()));
+            }
+            if (StringUtils.isNotEmpty(hotelQuery.getCity())) {
+                list.add(criteriaBuilder.equal(root.get("city").as(String.class), hotelQuery.getCity()));
+            }
+            if (StringUtils.isNotEmpty(hotelQuery.getBrandName())) {
+                list.add(criteriaBuilder.equal(root.get("brandName").as(String.class), hotelQuery.getBrandName()));
+            }
+            if (StringUtils.isNotEmpty(hotelQuery.getRegion())) {
+                list.add(criteriaBuilder.equal(root.get("region").as(String.class), hotelQuery.getRegion()));
+            }
+            Predicate[] p = new Predicate[list.size()];
+            return criteriaBuilder.and(list.toArray(p));
+        }, pageable);
     }
 
 }

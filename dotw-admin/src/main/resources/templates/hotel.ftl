@@ -41,8 +41,16 @@
                 </table>
 
                 <div id="toolbar" style="padding: 3px;">
+                    <span>酒店代码：</span>
+                    <input type="text" id="hotelCode" style="line-height:26px;border:1px solid #ccc" />
                     <span>所属国家：</span>
                     <input type="text" id="country" style="line-height:26px;border:1px solid #ccc" />
+                    <span>所属城市：</span>
+                    <input type="text" id="city" style="line-height:26px;border:1px solid #ccc" />
+                    <span>所属地区：</span>
+                    <input type="text" id="region" style="line-height:26px;border:1px solid #ccc" />
+                    <span>品牌名称：</span>
+                    <input type="text" id="brandName" style="line-height:26px;border:1px solid #ccc" />
                     <a href="javascript:doSearch();" class="easyui-linkbutton" data-options="iconCls:'icon-search'" style="width: 80px;">搜索</a>
                 </div>
 
@@ -62,7 +70,11 @@
 
     function doSearch() {
         $('#hotelTable').datagrid('load', {
-            country: $('#country').val()
+            hotelCode: $('#hotelCode').val(),
+            country: $('#country').val(),
+            city: $('#city').val(),
+            region: $('#region').val(),
+            brandName: $('#brandName').val()
         });
     }
 

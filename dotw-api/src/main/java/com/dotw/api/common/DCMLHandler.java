@@ -1,8 +1,11 @@
 package com.dotw.api.common;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.dotw.api.util.XmlTool;
 import com.dotw.core.util.PasswordEncryption;
 import lombok.extern.apachecommons.CommonsLog;
+import net.sf.json.xml.XMLSerializer;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -13,6 +16,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
 
 /**
  * @author lazyb
@@ -92,6 +97,70 @@ public class DCMLHandler {
         request.addAttribute("command", "getcurrenciesids");
         log.info(doc.asXML());
         return doc;
+    }
+
+    public String sendDotwString(Document doc) {
+        log.info(doc.asXML());
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.TEXT_XML);
+        HttpEntity<String> xmlEntity = new HttpEntity<>(doc.asXML(), headers);
+        ResponseEntity<String> responseEntity = restTemplate.postForEntity("http://" + DOTWUrl, xmlEntity, String.class);
+        log.info(responseEntity);
+        return responseEntity.getBody();
+    }
+
+    /**
+     * 通过dotw_hotel_code列表来获取dotw的酒店明细和房间数据
+     * @param list
+     * @param fromDate
+     * @param toDate
+     * @return
+     */
+    public JSONObject searchHotelByID(List<String> list, String fromDate, String toDate) {
+        JSONObject result = null;
+        String xml = "";
+        Document doc = generateBaseRequest();
+        Element customer = doc.getRootElement();
+        customer.addElement("product").setText("hotel");
+        Element request = customer.addElement("request");
+        request.addAttribute("command", "searchhotels");
+        Element bookingDetails = request.addElement("bookingDetails");
+        bookingDetails.addElement("fromDate").setText(fromDate);
+        bookingDetails.addElement("toDate").setText(toDate);
+        bookingDetails.addElement("currency").setText("2524");
+        Element rooms = bookingDetails.addElement("rooms").addAttribute("no", "1");
+        Element room = rooms.addElement("room").addAttribute("runno", "0");
+        room.addElement("adultsCode").setText("2");
+        room.addElement("children").addAttribute("no", "0");
+        room.addElement("rateBasis").setText("-1");
+        room.addElement("passengerNationality").setText("168");
+        room.addElement("passengerCountryOfResidence").setText("168");
+        Element returnEl = request.addElement("return");
+        Element filters = returnEl.addElement("filters");
+        filters.addAttribute("xmlns:a", "http://us.dotwconnect.com/xsd/atomicCondition").
+                addAttribute("xmlns:c", "http://us.dotwconnect.com/xsd/complexCondition").
+                addNamespace("a", "http://us.dotwconnect.com/xsd/atomicCondition").
+                addNamespace("c", "http://us.dotwconnect.com/xsd/complexCondition");
+        Element cCondition = filters.addElement("c:condition");
+        Element a1 = cCondition.addElement("a:condition");
+        a1.addElement("fieldName").setText("onRequest");
+        a1.addElement("fieldTest").setText("equals");
+        Element a1FieldValues = a1.addElement("fieldValues");
+        a1FieldValues.addElement("fieldValue").setText("1");
+        cCondition.addElement("operator").setText("AND");
+        Element a2 = cCondition.addElement("a:condition");
+        a2.addElement("fieldName").setText("hotelId");
+        a2.addElement("fieldTest").setText("in");
+        Element a2FieldValues = a2.addElement("fieldValues");
+        for (String code : list) {
+            a2FieldValues.addElement("fieldValue").setText(code);
+        }
+        String xmlResp = this.sendDotwString(doc);
+        XMLSerializer xmlSerializer = new XMLSerializer();
+        String resutStr = xmlSerializer.read(xmlResp).toString();
+        result = JSON.parseObject(resutStr);
+        return result;
     }
 
 }

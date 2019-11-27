@@ -1,6 +1,7 @@
 package com.dotw.admin.controller;
 
 import com.dotw.core.domain.HotelInfo;
+import com.dotw.core.domain.query.HotelQuery;
 import com.dotw.core.service.HotelInfoService;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +25,16 @@ public class HotelController {
     private HotelInfoService hotelInfoService;
 
     @GetMapping("/hotel/list")
-    public Map<String, Object> getAllHotel(int page, int rows, String country) {
+    public Map<String, Object> getAllHotel(int page, int rows, String country, String city,
+                                           String brandName, String region, String hotelCode) {
         Map<String, Object> resMap = new HashMap<>();
-        Page<HotelInfo> ph = hotelInfoService.findAllByPageQuery(page, rows, country);
+        HotelQuery hotelQuery = new HotelQuery();
+        hotelQuery.setBrandName(brandName);
+        hotelQuery.setCity(city);
+        hotelQuery.setCountry(country);
+        hotelQuery.setRegion(region);
+        hotelQuery.setDotwHotelCode(hotelCode);
+        Page<HotelInfo> ph = hotelInfoService.findAllByPageQuery(page, rows, hotelQuery);
         resMap.put("total", ph.getTotalElements());
         resMap.put("rows", ph.getContent());
         return resMap;
