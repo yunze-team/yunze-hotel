@@ -51,7 +51,7 @@ public class HotelInfoApiService {
         String fromDate = DateTime.now().plusDays(1).toString("yyyy-MM-dd");
         String toDate = DateTime.now().plusDays(30).toString("yyyy-MM-dd");
         List<String> idArray = Arrays.asList(ids.split(","));
-        return dcmlHandler.searchHotelByID(idArray, fromDate, toDate);
+        return dcmlHandler.searchHotelPriceByID(idArray, fromDate, toDate);
     }
 
     public JSONObject searchHotelByCountryAndCity(String country, String city, int page, int size) {
@@ -66,7 +66,22 @@ public class HotelInfoApiService {
         }
         String fromDate = DateTime.now().plusDays(1).toString("yyyy-MM-dd");
         String toDate = DateTime.now().plusDays(30).toString("yyyy-MM-dd");
-        return dcmlHandler.searchHotelByID(ids, fromDate, toDate);
+        return dcmlHandler.searchHotelPriceByID(ids, fromDate, toDate);
+    }
+
+    public JSONObject searchHotelInfo(String country, String city, int page) {
+        HotelQuery query = new HotelQuery();
+        query.setCountry(country);
+        query.setCity(city);
+        Page<HotelInfo> hp = hotelInfoService.findAllByPageQuery(page, 50, query);
+        List<HotelInfo> hlist = hp.getContent();
+        List<String> ids = new ArrayList<>();
+        for (HotelInfo h : hlist) {
+            ids.add(h.getDotwHotelCode());
+        }
+        String fromDate = DateTime.now().toString("yyyy-MM-dd");
+        String toDate = DateTime.now().plusDays(1).toString("yyyy-MM-dd");
+        return dcmlHandler.searchHotelInfoById(ids, fromDate, toDate);
     }
 
 }
